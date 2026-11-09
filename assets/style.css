@@ -70,3 +70,8 @@ body.noscroll{overflow:hidden}
 @media (max-width:560px){.qv{padding:8px}.qv-in{padding:12px}.qv .nav{display:none}}
 .f small{font-size:12px;opacity:.6;margin-left:2px}
 .lbl-s{display:block;font-size:10px;font-weight:400;line-height:1.1}
+.sug{position:absolute;left:16px;right:16px;z-index:30;margin-top:6px;max-height:min(60vh,420px);overflow:auto;background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 12px 30px rgba(0,0,0,.12);padding:6px}
+.sug button{display:flex;gap:10px;align-items:center;width:100%;text-align:left;font:inherit;font-size:15px;padding:10px 10px;border:0;background:none;border-radius:8px;cursor:pointer;color:var(--ink)}
+.sug button:hover,.sug button:focus{background:var(--bg);outline:none}
+.sg-r{flex:none;font-size:12px;font-weight:700;background:var(--yellow);padding:1px 7px;border-radius:999px}
+.sg-more{margin:6px 10px;font-size:13px;color:var(--sub)}
