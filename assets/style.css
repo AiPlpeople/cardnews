@@ -75,3 +75,4 @@ body.noscroll{overflow:hidden}
 .sug button:hover,.sug button:focus{background:var(--bg);outline:none}
 .sg-r{flex:none;font-size:12px;font-weight:700;background:var(--yellow);padding:1px 7px;border-radius:999px}
 .sg-more{margin:6px 10px;font-size:13px;color:var(--sub)}
+[hidden]{display:none!important}
