@@ -69,3 +69,4 @@ body.noscroll{overflow:hidden}
 .qv-bot{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 @media (max-width:560px){.qv{padding:8px}.qv-in{padding:12px}.qv .nav{display:none}}
 .f small{font-size:12px;opacity:.6;margin-left:2px}
+.lbl-s{display:block;font-size:10px;font-weight:400;line-height:1.1}
