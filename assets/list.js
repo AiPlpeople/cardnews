@@ -25,7 +25,7 @@ function idx(){return Math.round(tr.scrollLeft/tr.clientWidth)}function go(i){i=
 function upd(){var i=idx();[].forEach.call(dots.children,function(d,j){d.classList.toggle("on",j===i)});pv.disabled=i===0;nx.disabled=i===4}
 tr.addEventListener("scroll",function(){requestAnimationFrame(upd)});pv.onclick=function(){go(idx()-1)};nx.onclick=function(){go(idx()+1)};
 function open(el,noHash){var no=el.getAttribute("href").match(/(\d{3})/)[1];cur=el;last=document.activeElement;
-box.querySelector(".qv-u").textContent=el.querySelector(".t-u").textContent;box.querySelector(".qv-h").textContent=el.querySelector(".t-h").textContent;
+var qu=box.querySelector(".qv-u");qu.textContent=el.querySelector(".t-u").textContent;if(el.dataset.c){var cs=document.createElement("span");cs.className="chair";cs.textContent=el.dataset.c;qu.appendChild(cs)}box.querySelector(".qv-h").textContent=el.querySelector(".t-h").textContent;
 var alts=["표지","숫자로 보는 현실","무엇이 바뀌었나","그래도 길은 있다","혼자서는 못 버팁니다"],h="",d="";
 for(var i=1;i<=5;i++){h+='<figure class="slide"><img src="img/'+no+'/'+i+'.webp" alt="'+alts[i-1]+'" width="1080" height="1080"></figure>';d+='<button class="dot-b" aria-label="'+i+'번째 카드"></button>'}
 tr.innerHTML=h;dots.innerHTML=d;[].forEach.call(dots.children,function(b,j){b.onclick=function(){go(j)}});
