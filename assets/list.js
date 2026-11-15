@@ -1,7 +1,7 @@
 (function(){
 var st={r:"",k:""},q=document.getElementById("q"),tiles=[].slice.call(document.querySelectorAll(".tile")),n=document.getElementById("n"),em=document.getElementById("empty");
 function norm(s){return(s||"").toLowerCase().replace(/\s+/g,"").replace(/(사업|공업)?협동조합(연합회)?|사단법인|\(사\)/g,"")}
-tiles.forEach(function(el){el._no=el.getAttribute("href").match(/(\d{3})/)[1];el._s=(el.dataset.s||"").replace(/\s+/g,"").replace(/\(사\)|사단법인/g,"")});
+tiles.forEach(function(el){el._no=el.getAttribute("href").match(/(\d{3})/)[1];el._s=((el.dataset.s||"")+" "+(el.dataset.c||"")).replace(/\s+/g,"").replace(/\(사\)|사단법인/g,"")});
 function vis(){return tiles.filter(function(el){return!el.hidden})}
 function apply(){var raw=(q.value||"").trim().toLowerCase(),toks=raw.split(/\s+/).filter(Boolean),c=0;
 tiles.forEach(function(el){var ok=(!st.r||el.dataset.r===st.r)&&(!st.k||el.dataset.k===st.k)&&toks.every(function(t){return /^\d{1,3}$/.test(t)?(+t===+el._no||(t.length<3&&el._no.indexOf(t)===0)):el._s.indexOf(t)>-1});el.hidden=!ok;if(ok)c++});
@@ -10,7 +10,7 @@ var hint=document.createElement("span");hint.className="hint";hint.hidden=true;d
 document.querySelectorAll(".f").forEach(function(b){b.addEventListener("click",function(){var g=b.dataset.g;st[g]=b.dataset.v;document.querySelectorAll('.f[data-g="'+g+'"]').forEach(function(x){x.classList.toggle("on",x===b)});apply()})});
 var sug=document.createElement("div");sug.className="sug";sug.hidden=true;q.insertAdjacentElement("afterend",sug);
 function suggest(){var raw=(q.value||"").trim();if(!raw){sug.hidden=true;sug.innerHTML="";return}var v=vis();
-sug.innerHTML=v.length?v.slice(0,30).map(function(el,i){return'<button type="button" data-i="'+tiles.indexOf(el)+'"><span class="sg-n">'+el._no+'</span><span class="sg-r">'+el.dataset.r+'</span>'+el.querySelector(".t-u").textContent+'</button>'}).join("")+(v.length>30?'<p class="sg-more">외 '+(v.length-30)+'곳은 아래 목록에서 보세요</p>':""):'<p class="sg-more">"'+raw.replace(/[<>&"]/g,"")+'"에 맞는 조합이 없습니다</p>';sug.hidden=false}
+sug.innerHTML=v.length?v.slice(0,30).map(function(el,i){return'<button type="button" data-i="'+tiles.indexOf(el)+'"><span class="sg-n">'+el._no+'</span><span class="sg-r">'+el.dataset.r+'</span>'+el.querySelector(".t-u").textContent+(el.dataset.c?'<span class="sg-c">'+el.dataset.c+'</span>':'')+'</button>'}).join("")+(v.length>30?'<p class="sg-more">외 '+(v.length-30)+'곳은 아래 목록에서 보세요</p>':""):'<p class="sg-more">"'+raw.replace(/[<>&"]/g,"")+'"에 맞는 조합이 없습니다</p>';sug.hidden=false}
 sug.addEventListener("click",function(e){var b=e.target.closest("button");if(b)open(tiles[+b.dataset.i])});
 q.addEventListener("input",function(){apply();suggest()});
 document.addEventListener("click",function(e){if(!sug.contains(e.target)&&e.target!==q)sug.hidden=true});
