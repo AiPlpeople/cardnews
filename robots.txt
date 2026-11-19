@@ -1,4 +1,2 @@
 User-agent: *
-Allow: /
-
-Sitemap: https://aiplpeople.github.io/cardnews/sitemap.xml
+Disallow: /
