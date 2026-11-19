@@ -23,7 +23,7 @@ q.addEventListener("focus",function(){if(q.value.trim())suggest()});
 q.addEventListener("keydown",function(e){if(e.key==="Enter"){var v=vis();if(v.length){e.preventDefault();open(v[0])}}});
 /* 바로 보기 */
 var box=document.createElement("div");box.className="qv";box.hidden=true;box.setAttribute("role","dialog");box.setAttribute("aria-modal","true");
-box.innerHTML='<div class="qv-in"><div class="qv-top"><div><p class="qv-u"></p><p class="qv-h"></p></div><button class="qv-x" aria-label="닫기">×</button></div><div class="viewer"><div class="track"></div><button class="nav prev" aria-label="이전 카드">‹</button><button class="nav next" aria-label="다음 카드">›</button><div class="dots"></div></div><p class="qv-hint">첫 장은 한 장 요약입니다. 옆으로 넘기면 카드 5장이 이어집니다.</p><div class="qv-bot"><a class="btn qv-more">자세히 보기 · 한 장 요약</a><button class="btn ghost qv-copy">링크 복사</button><button class="btn kakao qv-kakao" style="display:none">카톡 공유</button></div></div>';
+box.innerHTML='<div class="qv-in"><div class="qv-top"><div><p class="qv-u"></p><p class="qv-h"></p></div><button class="qv-x" aria-label="닫기">×</button></div><div class="viewer"><div class="track"></div><button class="nav prev" aria-label="이전 카드">‹</button><button class="nav next" aria-label="다음 카드">›</button><div class="dots"></div></div><p class="qv-hint">첫 장은 한 장 요약입니다. 옆으로 넘기면 카드 5장이 이어집니다.</p><div class="qv-bot"><a class="btn qv-more">자세히 보기 · 한 장 요약</a><button class="btn ghost qv-copy">공유하기</button><button class="btn kakao qv-kakao" style="display:none">카톡 공유</button></div></div>';
 document.body.appendChild(box);
 var tr=box.querySelector(".track"),dots=box.querySelector(".dots"),pv=box.querySelector(".prev"),nx=box.querySelector(".next"),cur=null,last=null;
 function idx(){return Math.round(tr.scrollLeft/tr.clientWidth)}function go(i){i=Math.max(0,Math.min(5,i));tr.scrollTo({left:i*tr.clientWidth,behavior:"smooth"})}
@@ -35,12 +35,12 @@ var alts=["표지","숫자로 보는 현실","무엇이 바뀌었나","그래도
 var vv=(el.dataset.v||'1');h+='<figure class="slide one-s"><img src="img/'+no+'/6.webp?v='+vv+'" alt="한 장 요약" width="1080" height="1350"></figure>';d+='<button class="dot-b" aria-label="한 장 요약"></button>';for(var i=1;i<=5;i++){h+='<figure class="slide"><img src="img/'+no+'/'+i+'.webp?v='+vv+'" alt="'+alts[i-1]+'" width="1080" height="1080" loading="lazy"></figure>';d+='<button class="dot-b" aria-label="'+i+'번째 카드"></button>'}
 tr.innerHTML=h;dots.innerHTML=d;[].forEach.call(dots.children,function(b,j){b.onclick=function(){go(j)}});
 box.querySelector(".qv-more").href="c/"+no+".html";box.dataset.no=no;box.hidden=false;document.body.classList.add("noscroll");tr.scrollLeft=0;upd();box.querySelector(".qv-x").focus();
-var kb=box.querySelector(".qv-kakao");if(window.cardShare&&cardShare.show()){kb.style.display="";cardShare.prep(no,vv);kb.onclick=function(){cardShare.go(no,vv,box.querySelector(".qv-u").firstChild.textContent+" — "+box.querySelector(".qv-h").textContent,kb)}}
+box._v=vv;var kb=box.querySelector(".qv-kakao");if(window.cardShare&&cardShare.show()){kb.style.display="";cardShare.prep(no,vv);kb.onclick=function(){cardShare.go(no,vv,box.querySelector(".qv-u").firstChild.textContent+" — "+box.querySelector(".qv-h").textContent,kb)}}
 if(!noHash)history.replaceState(null,"","#"+no)}
 function close(){box.hidden=true;document.body.classList.remove("noscroll");history.replaceState(null,"",location.pathname+location.search);if(last&&last.focus)last.focus()}
 box.querySelector(".qv-x").onclick=close;box.addEventListener("click",function(e){if(e.target===box)close()});
 document.addEventListener("keydown",function(e){if(box.hidden)return;if(e.key==="Escape")close();if(e.key==="ArrowLeft")go(idx()-1);if(e.key==="ArrowRight")go(idx()+1)});
-box.querySelector(".qv-copy").onclick=function(){var b=this,u=location.origin+location.pathname.replace(/index\.html$/,"")+"c/"+box.dataset.no+".html";(navigator.clipboard?navigator.clipboard.writeText(u):Promise.reject()).then(function(){b.textContent="복사했습니다";setTimeout(function(){b.textContent="링크 복사"},1800)},function(){prompt("링크를 복사하세요",u)})};
+box.querySelector(".qv-copy").onclick=function(){if(window.cardShare)cardShare.img(box.dataset.no,box._v||"1",this)};
 tiles.forEach(function(el){el.addEventListener("click",function(e){if(e.ctrlKey||e.metaKey||e.shiftKey||e.button)return;e.preventDefault();open(el)})});
 var m=location.hash.match(/^#(\d{3})$/);if(m){var t=tiles.filter(function(el){return el.getAttribute("href").indexOf(m[1])>-1})[0];if(t)open(t,true)}
 })();

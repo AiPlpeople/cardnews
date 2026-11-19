@@ -11,7 +11,11 @@ function save(f){f.forEach(function(x,i){setTimeout(function(){var a=document.cr
  setTimeout(function(){alert("카드 이미지 6장을 휴대폰에 저장했습니다.\n카카오톡 대화방에서 + → 앨범을 눌러 보내 주세요.")},f.length*500+300)}
 window.cardShare={
  show:function(){return true},
- prep:function(no,v){if(KAKAO_KEY)kakao().catch(function(){});else files(no,v)},
+ prep:function(no,v){if(KAKAO_KEY)kakao().catch(function(){});files(no,v)},
+ img:function(no,v,btn){var t=btn.textContent;btn.textContent="준비 중…";
+  return files(no,v).then(function(f){btn.textContent=t;
+   if(fileOK()&&navigator.canShare({files:f}))return navigator.share({files:f}).catch(function(e){if(e&&e.name!=="AbortError")save(f)});
+   save(f)}).catch(function(){btn.textContent=t;alert("이미지를 준비하지 못했습니다. 잠시 뒤 다시 눌러 주세요.")})},
  go:function(no,v,title,btn){var url=ROOT+"c/"+no+".html";
   if(KAKAO_KEY){var send=function(K){K.Share.sendDefault({objectType:"feed",content:{title:title,description:"업종별 생존·전환 지도",imageUrl:ROOT+"img/"+no+"/kakao.jpg?v="+v,imageWidth:1080,imageHeight:1350,link:{mobileWebUrl:url,webUrl:url}},buttons:[{title:"카드 보기",link:{mobileWebUrl:url,webUrl:url}}]})};
    if(window.Kakao&&Kakao.isInitialized()){try{send(Kakao)}catch(e){alert("카카오톡 공유를 열지 못했습니다.")}return}

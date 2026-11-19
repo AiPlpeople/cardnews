@@ -3,8 +3,7 @@ function idx(){return Math.round(tr.scrollLeft/tr.clientWidth)}function go(i){i=
 function upd(){var i=idx();d.forEach(function(x,j){x.classList.toggle("on",j===i)});p.disabled=i===0;nx.disabled=i===sl.length-1}
 tr.addEventListener("scroll",function(){window.requestAnimationFrame(upd)});p.onclick=function(){go(idx()-1)};nx.onclick=function(){go(idx()+1)};d.forEach(function(x,j){x.onclick=function(){go(j)}});
 document.querySelector(".viewer").addEventListener("keydown",function(e){if(e.key==="ArrowLeft")go(idx()-1);if(e.key==="ArrowRight")go(idx()+1)});upd();
-var s=document.getElementById("share");s.onclick=function(){var u=location.href;function done(){s.textContent="복사했습니다";setTimeout(function(){s.textContent="링크 복사"},1800)}
-if(navigator.share&&/Mobi/.test(navigator.userAgent)){navigator.share({title:document.title,url:u}).catch(function(){})}else if(navigator.clipboard){navigator.clipboard.writeText(u).then(done,function(){prompt("링크를 복사하세요",u)})}else{prompt("링크를 복사하세요",u)}}})();
+var s=document.getElementById("share");s.onclick=function(){var no=(location.pathname.match(/(\d{3})\.html/)||[])[1],v=((document.querySelector(".track img")||{}).src||"").split("v=")[1]||"1";if(window.cardShare)cardShare.img(no,v,s)}})();
 
 (function(){var b=document.getElementById("cshare"),S=window.cardShare;if(!b||!S||!S.show())return;b.style.display="";
 var no=(location.pathname.match(/(\d{3})\.html/)||[])[1],v=((document.querySelector(".track img")||{}).src||"").split("v=")[1]||"1",t=document.title.split(" | ")[0];
