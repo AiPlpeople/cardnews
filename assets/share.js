@@ -1,6 +1,6 @@
-/* 카톡 공유: KAKAO_KEY가 있으면 카카오톡 공유(카톡만 열림), 없으면 휴대폰 공유창으로 카드 6장 JPG */
+/* 카톡 공유: KAKAO_KEY가 있으면 카카오톡 공유(카톡만 열림, 말풍선), 없으면 휴대폰 공유창으로 카드 6장 JPG */
 (function(){
-var KAKAO_KEY="";
+var KAKAO_KEY="2764d2c5d13a570ed4d1e8a274c569f0";
 var ROOT=(document.currentScript&&document.currentScript.src||"").replace(/assets\/share\.js.*$/,"");
 var mob=/Mobi|Android|iPhone|iPad/.test(navigator.userAgent);
 function fileOK(){try{return!!(navigator.share&&navigator.canShare&&navigator.canShare({files:[new File([""],"t.jpg",{type:"image/jpeg"})]}))}catch(e){return false}}
@@ -11,9 +11,11 @@ function save(f){f.forEach(function(x,i){setTimeout(function(){var a=document.cr
  setTimeout(function(){alert("카드 이미지 6장을 휴대폰에 저장했습니다.\n카카오톡 대화방에서 + → 앨범을 눌러 보내 주세요.")},f.length*500+300)}
 window.cardShare={
  show:function(){return true},
- prep:function(no,v){if(!KAKAO_KEY)files(no,v)},
+ prep:function(no,v){if(KAKAO_KEY)kakao().catch(function(){});else files(no,v)},
  go:function(no,v,title,btn){var url=ROOT+"c/"+no+".html";
-  if(KAKAO_KEY){return kakao().then(function(K){K.Share.sendDefault({objectType:"feed",content:{title:title,description:"업종별 생존·전환 지도",imageUrl:ROOT+"img/"+no+"/og.jpg",imageWidth:1200,imageHeight:630,link:{mobileWebUrl:url,webUrl:url}},buttons:[{title:"카드 보기",link:{mobileWebUrl:url,webUrl:url}}]})})}
+  if(KAKAO_KEY){var send=function(K){K.Share.sendDefault({objectType:"feed",content:{title:title,description:"업종별 생존·전환 지도",imageUrl:ROOT+"img/"+no+"/og.jpg",imageWidth:1200,imageHeight:630,link:{mobileWebUrl:url,webUrl:url}},buttons:[{title:"카드 보기",link:{mobileWebUrl:url,webUrl:url}}]})};
+   if(window.Kakao&&Kakao.isInitialized()){try{send(Kakao)}catch(e){alert("카카오톡 공유를 열지 못했습니다.")}return}
+   return kakao().then(send).catch(function(){alert("카카오톡 공유를 불러오지 못했습니다. 잠시 뒤 다시 눌러 주세요.")})}
   var t=btn.textContent;btn.textContent="준비 중…";
   return files(no,v).then(function(f){btn.textContent=t;
    if(fileOK()&&navigator.canShare({files:f}))return navigator.share({files:f}).catch(function(e){if(e&&e.name!=="AbortError")save(f)});
