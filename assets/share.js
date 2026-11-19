@@ -13,7 +13,7 @@ window.cardShare={
  show:function(){return true},
  prep:function(no,v){if(KAKAO_KEY)kakao().catch(function(){});else files(no,v)},
  go:function(no,v,title,btn){var url=ROOT+"c/"+no+".html";
-  if(KAKAO_KEY){var send=function(K){K.Share.sendDefault({objectType:"feed",content:{title:title,description:"업종별 생존·전환 지도",imageUrl:ROOT+"img/"+no+"/og.jpg",imageWidth:1200,imageHeight:630,link:{mobileWebUrl:url,webUrl:url}},buttons:[{title:"카드 보기",link:{mobileWebUrl:url,webUrl:url}}]})};
+  if(KAKAO_KEY){var send=function(K){K.Share.sendDefault({objectType:"feed",content:{title:title,description:"업종별 생존·전환 지도",imageUrl:ROOT+"img/"+no+"/kakao.jpg?v="+v,imageWidth:1080,imageHeight:1350,link:{mobileWebUrl:url,webUrl:url}},buttons:[{title:"카드 보기",link:{mobileWebUrl:url,webUrl:url}}]})};
    if(window.Kakao&&Kakao.isInitialized()){try{send(Kakao)}catch(e){alert("카카오톡 공유를 열지 못했습니다.")}return}
    return kakao().then(send).catch(function(){alert("카카오톡 공유를 불러오지 못했습니다. 잠시 뒤 다시 눌러 주세요.")})}
   var t=btn.textContent;btn.textContent="준비 중…";
