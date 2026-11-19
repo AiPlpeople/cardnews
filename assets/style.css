@@ -90,3 +90,4 @@ body.noscroll{overflow:hidden}
 .faq-i{border-bottom:1px solid var(--line);padding:10px 0}.faq-i summary{cursor:pointer;font-weight:600}.faq-i p{margin:8px 0 0;line-height:1.6}
 
 .btn.kakao{background:#FEE500;color:#191919;border-color:#FEE500}.btn.kakao:hover{background:#F5DC00}
+@media (max-width:640px){.qv-bot .qv-more{flex:1 1 100%;text-align:center}.qv-bot .qv-copy,.qv-bot .qv-kakao{flex:1 1 0;text-align:center}}
