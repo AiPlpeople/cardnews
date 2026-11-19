@@ -9,10 +9,15 @@ n.textContent=c;em.hidden=c>0;hint.hidden=!(raw&&c>0);hint.textContent=c===1?"En
 var hint=document.createElement("span");hint.className="hint";hint.hidden=true;document.querySelector(".count").appendChild(hint);
 document.querySelectorAll(".f").forEach(function(b){b.addEventListener("click",function(){var g=b.dataset.g;st[g]=b.dataset.v;document.querySelectorAll('.f[data-g="'+g+'"]').forEach(function(x){x.classList.toggle("on",x===b)});apply()})});
 var sug=document.createElement("div");sug.className="sug";sug.hidden=true;q.insertAdjacentElement("afterend",sug);
-function suggest(){var raw=(q.value||"").trim();if(!raw){sug.hidden=true;sug.innerHTML="";return}var v=vis();
-sug.innerHTML=v.length?v.slice(0,30).map(function(el,i){return'<button type="button" data-i="'+tiles.indexOf(el)+'"><span class="sg-n">'+el._no+'</span><span class="sg-r">'+el.dataset.r+'</span>'+el.querySelector(".t-u").textContent+(el.dataset.c?'<span class="sg-c">'+el.dataset.c+'</span>':'')+'</button>'}).join("")+(v.length>30?'<p class="sg-more">외 '+(v.length-30)+'곳은 아래 목록에서 보세요</p>':""):'<p class="sg-more">"'+raw.replace(/[<>&"]/g,"")+'"에 맞는 조합이 없습니다</p>';sug.hidden=false}
+function esc(s){return(s||"").replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function hl(s,toks){var h=esc(s);toks.forEach(function(t){if(!t||/^\d+$/.test(t))return;var i=h.toLowerCase().indexOf(esc(t));if(i>-1)h=h.slice(0,i)+"<mark>"+h.slice(i,i+esc(t).length)+"</mark>"+h.slice(i+esc(t).length)});return h}
+function suggest(){var raw=(q.value||"").trim();if(!raw){sug.hidden=true;sug.innerHTML="";return}var v=vis(),toks=raw.toLowerCase().split(/\s+/).filter(Boolean);
+var rows=v.map(function(el){var c=el.dataset.c||"",nm=c.split(" ")[0],byName=toks.some(function(t){return!/^\d+$/.test(t)&&nm.toLowerCase().indexOf(t)>-1});return{el:el,c:c,nm:nm,rest:c.slice(nm.length).trim(),p:byName}});
+rows.sort(function(a,b){return(b.p?1:0)-(a.p?1:0)});
+sug.innerHTML=rows.length?rows.slice(0,30).map(function(r){var u=r.el.querySelector(".t-u").textContent,meta=r.el._no+" · "+esc(r.el.dataset.r);
+return'<button type="button" data-i="'+tiles.indexOf(r.el)+'">'+(r.p?'<span class="sg-1"><b>'+hl(r.nm,toks)+'</b> '+esc(r.rest)+'</span><span class="sg-2">'+meta+' · '+esc(u)+'</span>':'<span class="sg-1">'+hl(u,toks)+'</span><span class="sg-2">'+meta+(r.c?' · '+esc(r.c):'')+'</span>')+'</button>'}).join("")+(rows.length>30?'<p class="sg-more">외 '+(rows.length-30)+'곳은 아래 목록에서 보세요</p>':""):'<p class="sg-more">"'+esc(raw)+'"에 맞는 조합이 없습니다</p>';sug.hidden=false}
 sug.addEventListener("click",function(e){var b=e.target.closest("button");if(b)open(tiles[+b.dataset.i])});
-q.addEventListener("input",function(){apply();suggest()});
+q.addEventListener("input",function(){apply();suggest()});q.addEventListener("compositionend",function(){apply();suggest()});q.addEventListener("keyup",function(e){if(e.key!=="Enter"&&e.key!=="Escape"){apply();suggest()}});
 document.addEventListener("click",function(e){if(!sug.contains(e.target)&&e.target!==q)sug.hidden=true});
 q.addEventListener("focus",function(){if(q.value.trim())suggest()});
 q.addEventListener("keydown",function(e){if(e.key==="Enter"){var v=vis();if(v.length){e.preventDefault();open(v[0])}}});
